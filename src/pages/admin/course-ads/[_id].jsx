@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { createContext, useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import { IconEdit } from "@/theme/icons";
 
 export const CourseAdsContext = createContext({});
 
@@ -19,6 +20,7 @@ export async function getServerSideProps(ctx) {
 export default function EditADS({ data: propsData, config }) {
     let [data, setData] = useState(propsData.course);
     let [form_port, set_form_port] = useState(false);
+    let [OnePart, set_OnePart] = useState(null);
     const { register, handleSubmit } = useForm({ defaultValues: data });
     let { query, push } = useRouter();
     let [view, setView] = useState("info")
@@ -53,6 +55,7 @@ export default function EditADS({ data: propsData, config }) {
         <div className="box grid">
             <CourseAdsContext.Provider value={{
                 data, setData, teacher: propsData.teacher,
+                OnePart, set_OnePart,
                 useView: { Set: set_form_port, view: form_port }, config
             }}>
                 <div className="box col m-20" style={{ maxWidth: "350px" }}>
@@ -84,10 +87,10 @@ export default function EditADS({ data: propsData, config }) {
                                 <option value={"905380594084"}  >الرقم التركي</option>
                                 <option value={"96181324565"}  >الرقم اللبناني</option>
                             </select>
- 
+
 
                             <label>الترتيب</label>
-                            <input type="number" {...register("sort")} /> 
+                            <input type="number" {...register("sort")} />
 
                             <label >وصف الدورة </label>
                             <textarea {...register("bio")} className="h-200" ></textarea>
@@ -118,6 +121,7 @@ export default function EditADS({ data: propsData, config }) {
                         </div>
                     </View>
                     <FormPart />
+                    <EditPart  OnePart={OnePart} />
                 </div>
                 <CourseAdsView data={data} call={false} />
             </CourseAdsContext.Provider>
@@ -180,10 +184,13 @@ function Add({ one }) {
     else return <button onClick={send} className={"err"}>حذف </button>
 }
 // ---------------------------------------------
+
 function FormPart() {
-    const { register, handleSubmit, reset } = useForm();
     let { query } = useRouter();
-    const { data, setData, teacher, useView, config } = useContext(CourseAdsContext);
+    const { data, setData, teacher, OnePart, set_OnePart, useView, config } = useContext(CourseAdsContext);
+    
+    console.log(OnePart)
+    const { register, handleSubmit, reset } = useForm( )
 
     let { view, Set: setView } = useView;
     const Send = (res) => {
@@ -192,13 +199,13 @@ function FormPart() {
         let image = null;
         function send(image) {
             let part = { ...res, image };
-
             setData({ ...data, part: [...data.part, part] });
-            axios.post(`/api/admin/course-ads/${query._id}`, part, config).then(({ data: d }) => {
-                message.success(d.msg);
-                reset();
-                setView(false);
-            });
+            let url = `/api/admin/course-ads/${query._id}` 
+                axios.post(url, part, config).then(({ data: d }) => {
+                    message.success(d.msg);
+                    reset();
+                    setView(false)
+                }); 
         }
         if (file.length > 0) {
             const reader = new FileReader();
@@ -206,7 +213,8 @@ function FormPart() {
             reader.readAsDataURL(file[0]);
         } else send(image);
     };
-    if (!view) return <></>
+    console.log(OnePart)
+    if (!view  ) return <></>
     else return (
         <form
             className="bord box col p-20 center "
@@ -235,15 +243,92 @@ function FormPart() {
             <input type="file" {...register("image")} />
 
             <div className="mt-20 w-full box row">
-                <Link href="/admin/course-ads" className="p-10 m-0 w-full btn off"> الغاء </Link>
+                <div className="p-10 m-0 w-full btn off"  onClick={() => {
+                         	set_OnePart(null) 
+                         	setView(false)
+                         	} } > الغاء </div>
                 <input type="submit" className="mr-10 w-full" />
             </div>
 
         </form>
     )
 }
+
+function EditPart({OnePart:One}) {
+    let { query } = useRouter();
+    const { data, setData, teacher,  set_OnePart, useView, config } = useContext(CourseAdsContext);
+     
+    const { register, handleSubmit, reset } = useForm({ defaultValues:async () => await One });
+    let { view, Set: setView } = useView;
+    const Send = (res) => {
+        const file = res.image //.files[0];
+
+        let image = null;
+        function send(image) {
+            let part = { ...res, image };
+            
+let filteredPart = data.part.filter(item => item._id != One._id);
+
+setData({ ...data, part: [...filteredPart, part] });
+            let url = `/api/admin/course-ads/${query._id}`
+            axios.patch(url, part, config).then(({ data: d }) => {
+                message.success(d.msg);
+                reset(); 
+                set_OnePart(null)
+            });
+
+        }
+        if (file.length > 0) {
+            const reader = new FileReader();
+            reader.onloadend = () => send(reader.result);
+            reader.readAsDataURL(file[0]);
+        } else send(image);
+    };
+    if (!One  ) return <></>
+    else return (
+        <form
+            className="bord box col p-20 center "
+            onSubmit={handleSubmit(Send)}
+            style={{ position: "absolute", zIndex: "1" }
+            }>
+            <h1 className="center box my-20">تعديل اعلان دورة   </h1>
+
+            <label >عنوان الاعلان</label>
+            <input type="text"    {...register("title")} />
+
+            <label >وصف الدورة</label>
+            <textarea {...register("about")} className="h-200"></textarea>
+
+            <label>الترتيب</label>
+            <input type="number" {...register("Sort")} />
+
+            <label>العرض</label>
+            <select {...register("typeView")}>
+                <option value="row">عرض افقي (الصورة اولا)</option>
+                <option value="row-reverse" >عرض افقي (المحتوى اولا)</option>
+                <option value="col">عرض عمودي</option>
+            </select>
+
+            <h3 >الصورة التعريفية</h3>
+            <input type="file" {...register("image")} />
+
+            <div className="mt-20 w-full box row">
+                <div className="p-10 m-0 w-full btn off"  onClick={() => {
+                         	set_OnePart(null) 
+                         	setView(false)
+                         	} } > الغاء </div>
+                <input type="submit" className="mr-10 w-full" />
+            </div>
+
+        </form>
+    )
+}
+
+
 function ListParts() {
-    const { data, setData, config } = useContext(CourseAdsContext);
+    const { data, setData, OnePart, set_OnePart,useView, config } = useContext(CourseAdsContext);
+    
+    let { view, Set: setView } = useView;
     let { query } = useRouter();
     function DELETE(id) {
         let url = `/api/admin/course-ads/${query._id}`;
@@ -259,8 +344,13 @@ function ListParts() {
             {data.part.map((a) => (
                 <div className="box row space aitem p-10 bord px-20 my-20" key={a._id}>
                     <p>{a.title}</p>
-                    <b onClick={() => DELETE(a._id)}>X</b>
-                </div>
+                    <div className="box row aitem">
+                         <div onClick={()=>{
+                         	set_OnePart(a) 
+                   		 
+                    }} ><IconEdit size={30} /></div>
+                        <b className="px-20" onClick={() => DELETE(a._id)}>X</b>
+                    </div></div>
             ))}
         </div>
     )

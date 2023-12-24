@@ -33,13 +33,14 @@ export default async function api_admin_course_ads_one(req, res, next) {
 
     app.patch(await Auth.getAdmin("admin"), async () => {
         let body = { part: req?.body };
+        console.log(body)
         let data = await CourseAds.updateOne({ _id: app.id }, body);
-        app.Send({ msg: "لقد تمت تحديث الفقرات", data });
+        app.Send({ msg: "لقد تمت تحديث الاعلان", data });
     });
  
 
     app.delete(await Auth.getAdmin("admin"), async () => {
         await CourseAds.deleteOne({ _id: app.id });
-        app.Send({ msg: "لقد تم حذف الكورس" });
+        app.Send({ msg: "لقد تم حذف الاعلان" });
     });
 }
