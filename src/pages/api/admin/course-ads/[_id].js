@@ -32,12 +32,13 @@ export default async function api_admin_course_ads_one(req, res, next) {
     });
 
     app.patch(await Auth.getAdmin("admin"), async () => {
-        let body = { part: req?.body };
-        console.log(body)
+        let ads =   await CourseAds.findById(app.id).select("part");
+        let all = ads.part.filter(a=> a._id != req?.body._id)
+        let body = { part: [...all, req?.body] }; 
         let data = await CourseAds.updateOne({ _id: app.id }, body);
-        app.Send({ msg: "لقد تمت تحديث الاعلان", data });
+        app.Send({ msg: "لقد تمت تحديث الفقرة", data });
     });
- 
+ app.all
 
     app.delete(await Auth.getAdmin("admin"), async () => {
         await CourseAds.deleteOne({ _id: app.id });
