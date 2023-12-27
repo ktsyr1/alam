@@ -262,12 +262,13 @@ function ListParts() {
 
     let { view, Set: setView } = useView;
     let { query } = useRouter();
-    function DELETE(id) {
+    function DELETE(_id) {
         let url = `/api/admin/course-ads/${query._id}`;
-        let part = data.part?.filter((a) => a._id !== id);
+        let part = data.part?.filter((a) => a._id !== _id);
         setData({ ...data, part });
-        let O = data.part?.filter((a) => a._id == id)[0];
-        axios.patch(url, part, config);
+
+        let O = data.part?.filter((a) => a._id == _id)[0];
+        axios.patch(url, { _id, type: "delete" }, config);
         message.success(`تم حذف الفقرة ${O?.title}`);
     }
     return (
