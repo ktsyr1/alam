@@ -76,8 +76,8 @@ export function IconAsk({ size, color, className, style }) {
 export function IconRef({ size, color, className, style }) {
     return (
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill={color} width={size} className={className} style={style}    >
-            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
             <g id="SVGRepo_iconCarrier">
                 <path d="M21.09 15.367L23 16.495 12 23 1 16.493l1.91-1.128.983.582-.927.547L12 21.838l9.033-5.342-.927-.547zM19.5 11.5c0 .03-.007.056-.009.085l1.543.911-4.198 2.483a1.988 1.988 0 0 1-.68.402L12 17.838l-9.035-5.344L5.5 10.998V9.837L1 12.493 12 19l11-6.505-3.5-2.067zM14 7V6H9v1zm-4 1v1h3V8zM7 2.5C7 1.66 7.952 1 9.167 1H18v11h-2v2H9.5A2.502 2.502 0 0 1 7 11.5zm1 0c0 .177.443.5 1.167.5H16v8h1V2H9.167C8.443 2 8 2.323 8 2.5zm0 9A1.502 1.502 0 0 0 9.5 13H15V4H9.167A2.943 2.943 0 0 1 8 3.77z" />
                 <path fill="none" d="M0 0h24v24H0z" />
@@ -95,6 +95,23 @@ export function IconEdit({ size,  color = "#555", className, style }) {
                 <path d="M21.2799 6.40005L11.7399 15.94C10.7899 16.89 7.96987 17.33 7.33987 16.7C6.70987 16.07 7.13987 13.25 8.08987 12.3L17.6399 2.75002C17.8754 2.49308 18.1605 2.28654 18.4781 2.14284C18.7956 1.99914 19.139 1.92124 19.4875 1.9139C19.8359 1.90657 20.1823 1.96991 20.5056 2.10012C20.8289 2.23033 21.1225 2.42473 21.3686 2.67153C21.6147 2.91833 21.8083 3.21243 21.9376 3.53609C22.0669 3.85976 22.1294 4.20626 22.1211 4.55471C22.1128 4.90316 22.0339 5.24635 21.8894 5.5635C21.7448 5.88065 21.5375 6.16524 21.2799 6.40005V6.40005Z" stroke={color} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                 <path d="M11 4H6C4.93913 4 3.92178 4.42142 3.17163 5.17157C2.42149 5.92172 2 6.93913 2 8V18C2 19.0609 2.42149 20.0783 3.17163 20.8284C3.92178 21.5786 4.93913 22 6 22H17C19.21 22 20 20.2 20 18V13" stroke={color} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
             </g>
+        </svg>
+    )
+}
+
+export function IconDate({ size, color = "#555", className, style }) {
+    return (
+        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" stroke={color} fill={color} width={size} className={className} style={style} strokeWidth="0.00032"  >
+            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" stroke="#CCCCCC" strokeWidth="0.064"></g>
+
+            <path d="M26,4V2H24V4H8V2H6V4H2V25a3,3,0,0,0,3,3H27a3,3,0,0,0,3-3V4Zm2,21a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V6H6V9H8V6H24V9h2V6h2Z"></path>
+            <path d="M6,17h6V11H6Zm2-4h2v2H8Z"></path>
+            <path d="M13,17h6V11H13Zm2-4h2v2H15Z"></path>
+            <path d="M20,17h6V11H20Zm2-4h2v2H22Z"></path>
+            <path d="M6,24h6V18H6Zm2-4h2v2H8Z"></path>
+            <path d="M13,24h6V18H13Zm2-4h2v2H15Z"></path>
+
         </svg>
     )
 }
